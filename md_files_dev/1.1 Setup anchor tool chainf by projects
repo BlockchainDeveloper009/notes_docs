@@ -1,0 +1,137 @@
+1.1 Setup anchor tool chainf by projects
+
+Perfect! Here’s a **complete setup example** for managing multiple versions of **Rust, Anchor, and Solana per project** using `direnv`, similar to Python virtual environments.
+
+---
+
+## **1️⃣ Install `direnv`**
+
+```bash
+sudo apt install direnv
+```
+
+Add to shell config (`~/.bashrc` or `~/.zshrc`):
+
+```bash
+eval "$(direnv hook bash)"   # or zsh
+```
+
+---
+
+## **2️⃣ Rust per project**
+
+In **Project1** root, create `rust-toolchain.toml`:
+
+```toml
+[toolchain]
+channel = "1.79.0"
+components = ["rust-src", "llvm-tools-preview"]
+targets = ["bpfel-unknown-unknown"]
+profile = "minimal"
+```
+
+In **Project2**, you can have:
+
+```toml
+[toolchain]
+channel = "nightly"
+components = ["rust-src", "llvm-tools-preview"]
+targets = ["bpfel-unknown-unknown"]
+profile = "minimal"
+```
+
+> Rust will automatically use the correct version when you `cd` into the project.
+
+---
+
+## **3️⃣ Anchor per project**
+
+Install locally in the project folder:
+
+```bash
+# Project1
+cargo install --locked --root ./anchor-cli anchor-cli --version 0.31.1
+
+# Project2
+cargo install --git https://github.com/coral-xyz/anchor --branch main --root ./anchor-cli
+```
+
+* This creates a `bin` folder inside each project: `./anchor-cli/bin/anchor`
+
+---
+
+## **4️⃣ Solana CLI per project**
+
+Install different Solana versions in separate folders:
+
+```bash
+# Project1 - Solana 1.18.18
+sh -c "$(curl -sSfL https://release.solana.com/v1.18.18/install)"
+
+# Project2 - Solana 2.2.17
+sh -c "$(curl -sSfL https://release.solana.com/v2.2.17/install)"
+```
+
+Don’t worry about conflicts; we’ll control PATH per project with `direnv`.
+
+---
+
+## **5️⃣ Configure `.envrc` for each project**
+
+**Project1 `.envrc`:**
+
+```bash
+# Rust (via rust-toolchain.toml, no need to add here)
+# Anchor CLI
+export PATH="$PWD/anchor-cli/bin:$PATH"
+# Solana CLI (adjust if needed)
+export PATH="$HOME/.local/share/solana/install/active_release/bin:$PATH"
+```
+
+**Project2 `.envrc`:**
+
+```bash
+export PATH="$PWD/anchor-cli/bin:$PATH"
+export PATH="$HOME/.local/share/solana/install/active_release/bin:$PATH"
+```
+
+> Adjust Solana paths according to where each version is installed.
+
+---
+
+## **6️⃣ Allow `direnv`**
+
+```bash
+direnv allow
+```
+
+* Do this in each project root once.
+* Now every time you `cd` into a project, the correct **Rust, Anchor, and Solana versions** are loaded automatically.
+
+---
+
+## **7️⃣ Verify**
+
+```bash
+rustc --version
+anchor --version
+solana --version
+```
+
+* You should see **different versions per project** depending on which directory you’re in.
+* Just like Python virtual environments, everything is isolated.
+
+---
+
+### ✅ **Benefits**
+
+* Fully isolated environments per project.
+* No conflicts between projects.
+* Easy to upgrade one project without breaking others.
+* Works for Solana, Anchor, and Rust simultaneously.
+
+---
+
+If you want, I can make a **ready-to-copy folder structure + commands** that sets up **Project1 and Project2 fully** with Rust, Anchor, Solana, and `.envrc` already configured.
+
+Do you want me to do that?

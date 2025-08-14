@@ -1,3 +1,6 @@
 
 
 anchor clean
+
+
+cargo
