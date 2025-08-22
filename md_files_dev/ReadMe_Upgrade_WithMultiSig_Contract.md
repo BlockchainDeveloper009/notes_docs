@@ -1,5 +1,99 @@
 ReadMe_Upgrade_WithMultiSig_Contract.md
 
+so when i create account this multisig authority account is created automatically by default with in solana. or i have to specific this during deployment
+
+
+Good question! By default, **Solana does NOT create a multisig authority for you**.
+
+When you deploy a program with Anchor (or Solana CLI):
+
+* The **upgrade authority** is set to **your current wallet (signer)** by default, not a multisig.
+* This means **you alone** can upgrade the program unless you change it.
+
+---
+
+### ✅ **If you want a multisig authority**
+
+You have to **create it manually** and then assign it as the upgrade authority.
+
+There are two common ways:
+
+---
+
+#### **Option 1: SPL Multisig Account**
+
+* Solana provides an **SPL Multisig Program** to create multisig accounts.
+* Example (3-of-5 multisig):
+
+```bash
+spl-token create-multisig 3 <SIGNER1> <SIGNER2> <SIGNER3> <SIGNER4> <SIGNER5>
+```
+
+This returns a **multisig account address**.
+Then set this as upgrade authority:
+
+```bash
+solana program set-upgrade-authority <PROGRAM_ID> --new-upgrade-authority <MULTISIG_PUBKEY>
+```
+
+---
+
+#### **Option 2: Use Squads or Realms (DAO)**
+
+* **Squads**: A multisig wallet app on Solana (friendly UI).
+* **Realms**: Governance DAO system.
+
+You create a multisig there, get the address, and run the same `set-upgrade-authority` command.
+
+---
+
+### ✅ **What happens by default?**
+
+If you do nothing:
+
+* **Upgrade authority = your local wallet** when you run `anchor deploy` the first time.
+* That wallet can upgrade the program anytime.
+
+---
+
+#### ⚠️ Important:
+
+If you ever run:
+
+```bash
+solana program set-upgrade-authority <PROGRAM_ID> --final
+```
+
+or:
+
+```bash
+solana program set-upgrade-authority <PROGRAM_ID> --new-upgrade-authority none
+```
+
+→ Your program becomes **immutable** forever (no more upgrades).
+
+---
+
+Do you want me to **show the full workflow** like:
+
+* Create a multisig (using SPL or Squads)
+* Deploy an Anchor program
+* Transfer upgrade authority to the multisig
+* Then perform an upgrade **through the multisig**
+  (with actual commands)?
+
+### create 5 new signers from solana command line
+
+  solana-keygen new --outfile ~/my-solana-keypair-1.json
+solana-keygen new --outfile ~/my-solana-keypair-2.json
+solana-keygen new --outfile ~/my-solana-keypair-3.json
+solana-keygen new --outfile ~/my-solana-keypair-4.json
+solana-keygen new --outfile ~/my-solana-keypair-5.json
+
+================================
+
+ReadMe_Upgrade_WithMultiSig_Contract.md
+
 
 ~$ solana config get
 Config File: /home/harishgk/.config/solana/cli/config.yml
