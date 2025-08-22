@@ -42,8 +42,7 @@ cargo.toml (smart contract folder level)
 base64ct = "=1.7.3"
 
 
-#### Cargo level:
-
+#### Cargo level: #downgrade #rustpackage
 cargo update -p base64ct@1.8.0 --precise 1.7.3
 cargo tree | grep base64ct
 

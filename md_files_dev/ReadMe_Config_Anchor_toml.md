@@ -24,3 +24,20 @@ Want me to give you **the exact commands to:**
 * Verify everything is synced?
 
 
+
+
+For Anchor 0.31.1, the compatible versions are:
+
+    Solana:
+    . 
+
+Solana CLI versions in the 2.1.x series are recommended, such as 2.1.0 or later within that series (e.g., 2.1.20). Specifying solana_version = "2.1.0" in your Anchor.toml under the [toolchain] section is a common practice.
+Rust:
+.
+
+    Rustc version 1.79.0 or newer is compatible. Anchor 0.31.x series programs build successfully with this Rust version. 
+
+It is important to ensure these versions are aligned to avoid compilation or deployment issues. Using a version manager like avm can help in pinning exact versions for Anchor and Solana CLI.
+
+setups local version for the project:
+[](/home/harishgk/source/repos/notes_docs/md_files_dev/Screenshot from 2025-08-14 12-33-55.png)
